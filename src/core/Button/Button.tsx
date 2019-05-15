@@ -51,14 +51,8 @@ const StyledButton = styled(
     theme,
     fullWidth,
     variant,
-    className,
     ...passProps
-  }: ButtonProps & { right?: boolean }) => (
-    <CompButton
-      {...passProps}
-      className={classnames(className, baseClassName)}
-    />
-  ),
+  }: ButtonProps & { right?: boolean }) => <CompButton {...passProps} />,
 )`
   ${props => baseStyles(props)}
 `;
@@ -86,19 +80,13 @@ const iconColor = ({
 
 const UnstyledButton = styled((props: ButtonProps) => {
   const {
-    className,
     fullWidth: dissmissFullWidth,
     variant: dissmissVariant,
     icon: dismissIcon,
     iconRight: dissmissIconRight,
     ...passProps
   } = props;
-  return (
-    <CompButton
-      {...passProps}
-      className={classnames(className, baseClassName)}
-    />
-  );
+  return <CompButton {...passProps} />;
 })`
   ${props => unStyled(props)}
 `;
