@@ -22,6 +22,13 @@ module.exports = {
   propsParser: require('react-docgen-typescript').withDefaultConfig({
     propFilter,
   }).parse,
+  moduleAliases: {
+    'suomifi-ui-components': path.resolve(__dirname, 'src'),
+    'rsg-components/ComponentsList/ComponentsListRenderer': path.resolve(
+      __dirname,
+      'node_modules/react-styleguidist/lib/client/rsg-components/ComponentsList/ComponentsListRenderer',
+    ),
+  },
   exampleMode: 'expand',
   usageMode: 'expand',
   pagePerSection: true,
@@ -33,7 +40,7 @@ module.exports = {
         {
           rel: 'stylesheet',
           href:
-            'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700',
+            'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600&display=swap',
         },
       ],
     },
@@ -45,4 +52,7 @@ module.exports = {
   },
   styles: require('./.styleguidist/styleguidist.styles.js'),
   sections: require('./.styleguidist/styleguidist.sections.js').sections,
+  styleguideComponents: {
+    ComponentsList: path.join(__dirname, '.styleguidist/ComponentsList'),
+  },
 };

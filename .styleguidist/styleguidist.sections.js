@@ -1,10 +1,31 @@
 const path = require('path');
 const glob = require('glob');
 
-const manuallyAddedComponents = 'Block|Button|Heading|Block|Paragraph|Text';
+const primitiveComponents = [
+  'Block',
+  'Button',
+  'Heading',
+  'Link',
+  'Icon',
+  ['Form', 'TextInput'],
+  ['Form', 'Toggle'],
+  ['Form', 'SearchInput'],
+];
 
-const getComponent = name =>
-  path.resolve(__dirname, `../src/core/${name}/${name}.tsx`);
+const getComponent = ({ name, underName }) =>
+  path.resolve(
+    __dirname,
+    `../src/core/${!!underName ? underName : name}/${name}.tsx`,
+  );
+const getComponents = arr =>
+  arr.map(component =>
+    Array.isArray(component)
+      ? getComponent({
+          name: component[1],
+          underName: `${component[0]}/${component[1]}`,
+        })
+      : getComponent({ name: component }),
+  );
 
 module.exports = {
   sections: [
@@ -34,29 +55,68 @@ module.exports = {
         {
           name: 'Primitive',
           content: './.styleguidist/primitive.md',
-          components: [
-            getComponent('Block'),
-            getComponent('Button'),
-            getComponent('Heading'),
-          ],
+          components: getComponents(primitiveComponents),
           sections: [
             {
               name: 'Text',
-              components: [getComponent('Text'), getComponent('Paragraph')],
+              components: getComponents(['Text', 'Paragraph']),
             },
           ],
         },
         {
           name: 'Patterns',
           content: './.styleguidist/patterns.md',
-          components: () => {
-            return glob.sync(
-              path.resolve(
-                __dirname,
-                `../src/core/!(${manuallyAddedComponents})/*.tsx`,
-              ),
-            );
-          },
+          sections: [
+            {
+              name: 'Breadcrumb',
+              components: getComponents([
+                'Breadcrumb',
+                ['Breadcrumb', 'BreadcrumbLink'],
+              ]),
+            },
+            {
+              name: 'Dropdown',
+              components: [
+                getComponent({ name: 'Dropdown' }),
+                getComponent({
+                  underName: 'Dropdown',
+                  name: 'DropdownItem',
+                }),
+              ],
+            },
+            {
+              name: 'Menu',
+              components: [
+                getComponent({ name: 'Menu' }),
+                // getComponent({
+                //   underName: 'Menu',
+                //   name: 'MenuItem',
+                // }),
+                getComponent({
+                  underName: 'Menu',
+                  name: 'MenuItemLanguage',
+                }),
+                getComponent({
+                  underName: 'Menu',
+                  name: 'MenuLinkLanguage',
+                }),
+              ],
+            },
+            {
+              name: 'Panel',
+              components: [
+                getComponent({ name: 'Panel' }),
+                getComponent({
+                  underName: 'Panel',
+                  name: 'PanelExpansion',
+                }),
+                getComponent({
+                  underName: 'Panel',
+                  name: 'PanelExpansionGroup',
+                }),
+              ],
+            },
+          ],
         },
       ],
       sectionDepth: 2,
